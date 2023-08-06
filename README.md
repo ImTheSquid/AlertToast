@@ -100,6 +100,18 @@ If you prefer not to use any of dependency managers, you can integrate `AlertToa
 
 First, add `import AlertToast` on every `swift` file you would like to use `AlertToast`.
 
+Then in a root view (for example `[AppNameHere]App` or the first view in a sheet), add this modifier:
+```swift
+var body: some View {
+    Group {
+        // ...
+    } // End of View declaration
+    .alertToastRoot()
+}
+```
+
+This allows alerts to be anchored to any root view of your choosing. Keep in mind that this always works on the farthest down view, so only put this in your root views!
+
 Then, use the `.toast` view modifier:
 
 **Parameters:**
