@@ -47,7 +47,6 @@ Alert Toast is an open-source library in Github to use with SwiftUI. It allows y
 ## Navigation
 
 - [Installation](#-installation)
-    - [CocoaPods](#cocoapods)
     - [Swift Package Manager](#swift-package-manager)
     - [Manually](#manually)
 - [Usage](#-usage)
@@ -60,8 +59,6 @@ Alert Toast is an open-source library in Github to use with SwiftUI. It allows y
  - [License](#-license)
 
 ## 💻 Installation
-
-------
 
 ### Swift Package Manager
 
