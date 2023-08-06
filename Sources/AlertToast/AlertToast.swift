@@ -392,7 +392,11 @@ public struct AlertToast: View{
         case .alert:
             alert
         case .hud:
-            hud
+            VStack {
+                hud
+                
+                Spacer()
+            }
         case .banner:
             banner
         }
@@ -676,10 +680,12 @@ public extension View{
     /// Present `AlertToast`.
     /// - Parameters:
     ///   - show: Binding<Bool>
+    ///   - duration: Set to `0` to disable automatic dismissal
     ///   - alert: () -> AlertToast
     /// - Returns: `AlertToast`
     func toast(isPresenting: Binding<Bool>, duration: Double = 2, tapToDismiss: Bool = true, offsetY: CGFloat = 0, alert: @escaping () -> AlertToast, onTap: (() -> ())? = nil, completion: (() -> ())? = nil) -> some View{
-        modifier(AlertToastModifier(isPresenting: isPresenting, duration: duration, tapToDismiss: tapToDismiss, offsetY: offsetY, alert: alert, onTap: onTap, completion: completion))
+//        modifier(AlertToastModifier(isPresenting: isPresenting, duration: duration, tapToDismiss: tapToDismiss, offsetY: offsetY, alert: alert, onTap: onTap, completion: completion))
+        self.modifier(StableIdProvider(isPresented: isPresenting, otherContent: alert, mode: alert().displayMode, duration: duration, tapToDismiss: tapToDismiss, onTap: onTap, completion: completion, offsetY: offsetY))
     }
     
     /// Choose the alert background
@@ -696,7 +702,7 @@ public extension View{
         modifier(TextForegroundModifier(color: color))
     }
     
-    @ViewBuilder fileprivate func valueChanged<T: Equatable>(value: T, onChange: @escaping (T) -> Void) -> some View {
+    @ViewBuilder internal func valueChanged<T: Equatable>(value: T, onChange: @escaping (T) -> Void) -> some View {
         if #available(iOS 14.0, *) {
             self.onChange(of: value, perform: onChange)
         } else {

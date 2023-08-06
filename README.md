@@ -1,6 +1,8 @@
 # AlertToast-SwiftUI [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20over%20170%20free%20design%20blocks%20based%20on%20Bootstrap%204&url=https://froala.com/design-blocks&via=froala&hashtags=bootstrap,design,templates,blocks,developers)
 ### Present Apple-like alert & toast in SwiftUI
 
+This is a fork of the original repo that fixes issues with presenting in sheets. However, this version has the limitation that only one alert may be presented at any given time.
+
 <p align="center">
    <img src="https://github.com/elai950/AlertToast/blob/master/Assets/GithubCoverNew.png" width="480"/>
 </p>
