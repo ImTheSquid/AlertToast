@@ -45,10 +45,12 @@ internal struct StableIdProvider<OtherContent: View>: ViewModifier {
     func body(content: Content) -> some View {
         content/*.background(Rectangle().hidden().preference(key: AlertToastView.self, value: AlertToastInfo(view: EquatableViewEraser(view: otherContent()), stableId: stableId, mode: mode)))*/
             .valueChanged(value: isPresented) { isPresented in
-                if isPresented {
-                    presented.wrappedValue = AlertToastInfo(view: EquatableViewEraser(view: otherContent()), stableId: stableId, mode: mode, duration: duration, tapToDismiss: tapToDismiss, onTap: onTap, completion: completion, offsetY: offsetY)
-                } else if presented.wrappedValue?.stableId.hashValue == stableId.hashValue {
-                    presented.wrappedValue = nil
+                withAnimation(.spring()) {
+                    if isPresented {
+                        presented.wrappedValue = AlertToastInfo(view: EquatableViewEraser(view: otherContent()), stableId: stableId, mode: mode, duration: duration, tapToDismiss: tapToDismiss, onTap: onTap, completion: completion, offsetY: offsetY)
+                    } else if presented.wrappedValue?.stableId.hashValue == stableId.hashValue {
+                        presented.wrappedValue = nil
+                    }
                 }
             }
             .valueChanged(value: presented.wrappedValue == nil) { notPresented in
