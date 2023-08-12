@@ -77,7 +77,7 @@ internal struct EquatableViewEraser: Equatable {
 
 internal struct AlertToastRoot: ViewModifier {
     @State private var toastInfo: AlertToastInfo?
-    @State private var workItem: DispatchWorkItem?
+    @State private var dismissalTask: Task<Void, Never>?
     
     func body(content: Content) -> some View {
         if #available(iOS 15.0, macOS 12.0, *) {
@@ -128,22 +128,24 @@ internal struct AlertToastRoot: ViewModifier {
     }
     
     private func handleOnAppear(withInfo info: AlertToastInfo) {
-        if let workItem = workItem {
+        if let workItem = dismissalTask {
             workItem.cancel()
         }
         
         guard info.duration > 0 else { return }
         
-        let task = DispatchWorkItem {
+        let task = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(1_000_000_000.0 * info.duration))
+            if Task.isCancelled {
+                return
+            }
             withAnimation(Animation.spring()){
                 toastInfo = nil
-                workItem = nil
+                dismissalTask = nil
             }
         }
         
-        workItem = task
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + info.duration, execute: task)
+        dismissalTask = task    
     }
     
     private func handleTap(withInfo info: AlertToastInfo) {
@@ -153,9 +155,9 @@ internal struct AlertToastRoot: ViewModifier {
         
         if info.tapToDismiss {
             withAnimation(Animation.spring()){
-                self.workItem?.cancel()
+                self.dismissalTask?.cancel()
                 toastInfo = nil
-                self.workItem = nil
+                self.dismissalTask = nil
             }
         }
     }
