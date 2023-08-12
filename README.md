@@ -1,5 +1,5 @@
-# AlertToast-SwiftUI [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Get%20over%20170%20free%20design%20blocks%20based%20on%20Bootstrap%204&url=https://froala.com/design-blocks&via=froala&hashtags=bootstrap,design,templates,blocks,developers)
-### Present Apple-like alert & toast in SwiftUI
+# AlertToast-SwiftUI
+### Present Apple-like alerts & toasts in SwiftUI
 
 This is a fork of the original repo that fixes issues with presenting in sheets. However, this version has the limitation that only one alert may be presented at any given time.
 
@@ -7,7 +7,7 @@ This is a fork of the original repo that fixes issues with presenting in sheets.
    <img src="https://github.com/elai950/AlertToast/blob/master/Assets/GithubCoverNew.png" width="480"/>
 </p>
 
-## 🌄 Example
+## 🌄 Examples
 
 <p align="center">
     <img src="https://github.com/elai950/AlertToast/blob/master/Assets/onboarding.png" style="display: block; margin: auto;"/>
@@ -19,11 +19,11 @@ This is a fork of the original repo that fixes issues with presenting in sheets.
 
 ## 🔭 Overview
 
-Currently in SwiftUI, the only way to inform the user about some process that finished for example, is by using `Alert`. Sometimes, you just want to pop a message that tells the user that something completed, or his message was sent. Apple doesn't provide any other method rather than using `Alert` even though Apple using all kinds of different pop-ups. The results are poor UX where the user would need to tap "OK/Dismiss" for every little information that he should be notified about.
+Currently in SwiftUI, the only way to inform the user about, for example, some process that finished, is by using `Alert`. Sometimes you just want to show a message that tells the user that something completed, or that a message was sent. Apple doesn't provide any other method rather than using `Alert` even though Apple uses all kinds of different pop-ups internally. The results is poor UX where the user needs to tap "OK/Dismiss" for every bit of information that they are notified about.
 
-Alert Toast is an open-source library in Github to use with SwiftUI. It allows you to present popups that don't need any user action to dismiss or to validate. Some great usage examples: `Message Sent`, `Poor Network Connection`, `Profile Updated`, `Logged In/Out`, `Favorited`, `Loading` and so on...
+Alert Toast is an open-source library in Github to use with SwiftUI. It allows you to present popups that don't need any user action to dismiss or validate. Some great usage examples: `Message Sent`, `Poor Network Connection`, `Profile Updated`, `Logged In/Out`, `Favorited`, `Loading`, and so on.
 
-<img src="https://img.shields.io/badge/BUILD-1.3.9-green?style=for-the-badge" />&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/PLATFORM-IOS%20|%20MACOS-lightgray?style=for-the-badge" />&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/LICENSE-MIT-lightgray?style=for-the-badge" />&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/MADE WITH-SWIFTUI-orange?style=for-the-badge" />
+<img src="https://img.shields.io/badge/PLATFORM-IOS%20|%20MACOS-lightgray?style=for-the-badge" />&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/LICENSE-MIT-lightgray?style=for-the-badge" />&nbsp;&nbsp;&nbsp;<img src="https://img.shields.io/badge/MADE WITH-SWIFTUI-orange?style=for-the-badge" />
 
 * Built with pure SwiftUI.
 * 3 Display modes: `Alert` (pop at the center), `HUD` (drop from the top) and `Banner` (pop/slide from the bottom).
@@ -32,17 +32,6 @@ Alert Toast is an open-source library in Github to use with SwiftUI. It allows y
 * Works with **any** kind of view builder.
 * Localization support.
 * Font & Background customization.
-
-#### If you like the project, don't forget to `put star 🌟`.
-
-<a href="mailto:elai950@gmail.com"><img src="https://img.shields.io/badge/EMAIL-ELAI-informational?style=for-the-badge&logo=minutemailer&logoColor=white"></a>&nbsp;&nbsp;&nbsp;<a href="https://www.linkedin.com/in/elai-zuberman-8120a073/" target="_blank"><img src="https://img.shields.io/badge/LINKEDIN-informational?style=for-the-badge&logo=linkedin&logoColor=white" ></a>&nbsp;&nbsp;&nbsp;<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5JN5PT55NAHKU" target="_blank"><img src="https://img.shields.io/badge/Donate-informational?style=for-the-badge&logo=paypal&logoColor=white" ></a>
-
-₿ Bitcoin donation address:
-```
-0xec48bfa813a773fa2394aec23f97da5cb4d5ff02
-```
-- Send only BTC to this deposit address.
-- Ensure the network is BNB Smart Chain (BEP20).
 
 ## Navigation
 
@@ -62,7 +51,7 @@ Alert Toast is an open-source library in Github to use with SwiftUI. It allows y
 
 ### Swift Package Manager
 
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for managing the distribution of Swift code. It’s integrated with the Swift build system to automate the process of downloading, compiling, and linking dependencies.
+[Swift Package Manager](https://swift.org/package-manager/) is a tool for managing the distribution of Swift code. It’s integrated with the Swift build system to automate the process of downloading, compiling, and linking dependencies.
 
 To integrate `AlertToast` into your Xcode project using Xcode 12, specify it in `File > Swift Packages > Add Package Dependency...`:
 
@@ -81,11 +70,11 @@ If you prefer not to use any of dependency managers, you can integrate `AlertToa
 ## 🧳 Requirements
 
 - iOS 13.0+ | macOS 11+
-- Xcode 12.0+ | Swift 5+
+- Swift 5+
 
 ## 🛠 Usage
 
-First, add `import AlertToast` on every `swift` file you would like to use `AlertToast`.
+First add `import AlertToast` to every `swift` file where you would like to use `AlertToast`.
 
 Then in a root view (for example `[AppNameHere]App` or the first view in a sheet), add this modifier:
 ```swift
@@ -99,7 +88,7 @@ var body: some View {
 
 This allows alerts to be anchored to any root view of your choosing. Keep in mind that this always works on the farthest down view, so only put this in your root views!
 
-Then, use the `.toast` view modifier:
+Then use the `.toast` view modifier:
 
 **Parameters:**
 
@@ -209,13 +198,7 @@ AlertToast(type: .image(String), title: Optional(String), subTitle: Optional(Str
 AlertToast(type: .loading, title: Optional(String), subTitle: Optional(String))
 ```
 
-You can add many `.toast` on a single view.
-
-## 📖 Article
-
-I wrote an article that contains more usage examples.
-
-[Medium - How to toast an alert in SwiftUI](https://elaizuberman.medium.com/presenting-apples-music-alerts-in-swiftui-7f5c32cebed6)
+You can add multiple `.toast`s on a single view.
 
 ## 👨‍💻 Contributors
 
@@ -225,11 +208,11 @@ All issue reports, feature requests, pull requests and GitHub stars are welcomed
 
 ## ✍️ Author
 
-Elai Zuberman
+Jack Hogan & Elai Zuberman
 
 ## 📃 License
 
-`AlertToast` is available under the MIT license. See the [LICENSE](https://github.com/elai950/AlertToast/blob/master/LICENSE.md) file for more info.
+`AlertToast` is available under the MIT license. See the [LICENSE](https://github.com/ImTheSquid/AlertToast/blob/master/LICENSE.md) file for more info.
 
 ---
 
