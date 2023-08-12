@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2021 Elai Zuberman
+Copyright (c) 2023 Jack Hogan, 2021 Elai Zuberman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
