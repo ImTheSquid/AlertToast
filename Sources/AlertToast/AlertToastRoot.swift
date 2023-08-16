@@ -7,7 +7,11 @@
 
 import SwiftUI
 
-internal struct AlertToastInfo {
+internal struct AlertToastInfo: Equatable {
+    static func == (lhs: AlertToastInfo, rhs: AlertToastInfo) -> Bool {
+        lhs.stableId.hashValue == rhs.stableId.hashValue && lhs.view.id == rhs.view.id
+    }
+    
     let view: EquatableViewEraser
     let stableId: any Hashable
     let mode: AlertToast.DisplayMode
@@ -45,12 +49,10 @@ internal struct StableIdProvider<OtherContent: View>: ViewModifier {
     func body(content: Content) -> some View {
         content/*.background(Rectangle().hidden().preference(key: AlertToastView.self, value: AlertToastInfo(view: EquatableViewEraser(view: otherContent()), stableId: stableId, mode: mode)))*/
             .valueChanged(value: isPresented) { isPresented in
-                withAnimation(.spring()) {
-                    if isPresented {
-                        presented.wrappedValue = AlertToastInfo(view: EquatableViewEraser(view: otherContent()), stableId: stableId, mode: mode, duration: duration, tapToDismiss: tapToDismiss, onTap: onTap, completion: completion, offsetY: offsetY)
-                    } else if presented.wrappedValue?.stableId.hashValue == stableId.hashValue {
-                        presented.wrappedValue = nil
-                    }
+                if isPresented {
+                    presented.wrappedValue = AlertToastInfo(view: EquatableViewEraser(view: otherContent()), stableId: stableId, mode: mode, duration: duration, tapToDismiss: tapToDismiss, onTap: onTap, completion: completion, offsetY: offsetY)
+                } else if presented.wrappedValue?.stableId.hashValue == stableId.hashValue {
+                    presented.wrappedValue = nil
                 }
             }
             .valueChanged(value: presented.wrappedValue == nil) { notPresented in
@@ -76,16 +78,17 @@ internal struct EquatableViewEraser: Equatable {
 }
 
 internal struct AlertToastRoot: ViewModifier {
+    let animation: Animation
     @State private var toastInfo: AlertToastInfo?
     @State private var dismissalTask: Task<Void, Never>?
     
     func body(content: Content) -> some View {
         if #available(iOS 15.0, macOS 12.0, *) {
             innerBody(content: content)
-            .animation(.spring(), value: toastInfo?.stableId.hashValue)
+                .animation(animation, value: toastInfo)
         } else {
             innerBody(content: content)
-            .animation(.spring())
+                .animation(animation)
         }
     }
     
@@ -93,6 +96,7 @@ internal struct AlertToastRoot: ViewModifier {
         ZStack {
             content
                 .environment(\.presentedAlertToastView, $toastInfo)
+                .zIndex(0)
             
             if let toastInfo = toastInfo {
                 formatAlert(AnyView(toastInfo.view.view), withMode: toastInfo.mode)
@@ -103,10 +107,11 @@ internal struct AlertToastRoot: ViewModifier {
                     .onDisappear(perform: {
                         handleOnDisappear(withInfo: toastInfo)
                     })
+                    .zIndex(1)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .valueChanged(value: toastInfo?.stableId.hashValue) { _ in
+        .valueChanged(value: toastInfo) { _ in
             if let toastInfo = toastInfo {
                 handleOnAppear(withInfo: toastInfo)
             }
@@ -128,7 +133,7 @@ internal struct AlertToastRoot: ViewModifier {
     }
     
     private func handleOnAppear(withInfo info: AlertToastInfo) {
-        if let workItem = dismissalTask {
+        if let workItem = dismissalTask, !workItem.isCancelled {
             workItem.cancel()
         }
         
@@ -139,10 +144,9 @@ internal struct AlertToastRoot: ViewModifier {
             if Task.isCancelled {
                 return
             }
-            withAnimation(Animation.spring()){
-                toastInfo = nil
-                dismissalTask = nil
-            }
+            
+            toastInfo = nil
+            dismissalTask = nil
         }
         
         dismissalTask = task    
@@ -154,10 +158,9 @@ internal struct AlertToastRoot: ViewModifier {
         }
         
         if info.tapToDismiss {
-            withAnimation(Animation.spring()){
-                self.dismissalTask?.cancel()
+            self.dismissalTask?.cancel()
+            Task { @MainActor in
                 toastInfo = nil
-                self.dismissalTask = nil
             }
         }
     }
@@ -170,7 +173,7 @@ internal struct AlertToastRoot: ViewModifier {
 }
 
 extension View {
-    public func alertToastRoot() -> some View {
-        self.modifier(AlertToastRoot())
+    public func alertToastRoot(usingAnimation animation: Animation = .spring()) -> some View {
+        self.modifier(AlertToastRoot(animation: animation))
     }
 }
